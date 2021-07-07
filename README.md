@@ -1,6 +1,7 @@
 # Visual-Math
 
 This is a visualization library (under development).
+This is being developed using PyGAME.
 
 Currently there are very basic features available.
 
