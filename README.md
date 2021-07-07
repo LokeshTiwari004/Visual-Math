@@ -1,6 +1,6 @@
 # Visual-Math
 
-This is a Visualisation library (under development).
+This is a visualization library (under development).
 
 Currently there are very basic features available.
 
