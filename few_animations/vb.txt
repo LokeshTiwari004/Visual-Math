@@ -1,0 +1,3 @@
+the image sequence is formed here.
+And this sequence is used to form movie.
+Then the folder is emptied.
