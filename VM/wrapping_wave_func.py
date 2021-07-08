@@ -27,14 +27,16 @@ fourth = Window(screen.screen, 440, 320, (3 * screen.s_w / 4, 520))
 rotation_frequency = 0.001
 rf = "{:.3f}".format(rotation_frequency)
 
-mm = moviemaker.MovieMaker('wrapping_wave_function')
+scene = moviemaker.FrameHandler(screen.screen)
+mm = moviemaker.MovieMaker(scene.frame_sequence, 'wrapping_wave_function')
 
 j = 1
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            mm.makeMovie()
+            mm.make_movie()
+            pygame.time.delay(5)
             mm.del_img_seq()
             sys.exit()
 
@@ -74,24 +76,15 @@ while True:
 
     pygame.display.update()
 
-    num = str(j)
-    if len(num) == 1:
-        num = '000' + num
-    elif len(num) == 2:
-        num = '00' + num
-    elif len(num) == 3:
-        num = '0' + num
-    frame = 'anim.001.' + num + '.png'
-    pygame.image.save(screen.screen, 'img_sequence/' + frame)
-
-    # pygame.time.delay(100)
+    scene.save_frame()
 
     rotation_frequency += 0.001
     rf = "{:.3f}".format(rotation_frequency)
 
     if j == 9999:
         pygame.quit()
-        mm.makeMovie()
+        mm.make_movie()
+        pygame.time.delay(5)
         mm.del_img_seq()
         sys.exit()
 
