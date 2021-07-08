@@ -45,5 +45,3 @@ class FrameHandler:
     def save_frame(self):
         pygame.image.save(self.screen, 'img_sequence/' + self.frame_name)
         self.handle_frame_name()
-
-

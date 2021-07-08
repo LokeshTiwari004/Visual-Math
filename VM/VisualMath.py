@@ -13,6 +13,12 @@ class Screen:
     def set_back(self):
         self.screen.fill((0, 0, 0))
 
+    def display_text(self, text, position):
+        v = pygame.font.SysFont('monospace', 15).render(str(text), False, (252, 225, 225), (13, 11, 11))
+        f = v.get_rect()
+        f.center = position
+        self.screen.blit(v, f)
+
 
 class Window:
     def __init__(self, screen=None, width=None, height=None, center=None, scaling=(20, 20)):
@@ -157,7 +163,7 @@ class Window:
             start_point = stop_point
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     screen = Screen()
     g = Window(screen.screen, 500, 500, (400, 300))
 

@@ -57,10 +57,7 @@ while True:
     second.draw(x, y2, lw=1)
     second.mention_grid_scale(bg=(252, 225, 225), test_color=(13, 11, 11))
 
-    v = pygame.font.SysFont('monospace', 15).render(f'rotation_frequency = {rf}', False, (252, 225, 225), (13, 11, 11))
-    f = v.get_rect()
-    f.center = (screen.s_w / 2, 340)
-    screen.screen.blit(v, f)
+    screen.display_text(f'rotation_frequency = {rf}', (screen.s_w / 2, 340))
 
     third.adjust_wscale_to((150, 150))
     for e in range(len(x)):
