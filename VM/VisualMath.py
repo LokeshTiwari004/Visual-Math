@@ -1,11 +1,12 @@
 import sys
-
+import numpy as np
 import pygame
+import moviemaker
+
 
 
 class Screen:
-    def __init__(self, width=1080, height=720):
-
+    def __init__(self, width=1280, height=1080):
         pygame.init()
         self.s_w, self.s_h = width, height
         self.screen = pygame.display.set_mode([width, height])
@@ -18,6 +19,27 @@ class Screen:
         f = v.get_rect()
         f.center = position
         self.screen.blit(v, f)
+
+    def initialise(self):
+        self.fh = moviemaker.FrameHandler(self.screen,img_format='.bmp')
+        self.mm = moviemaker.MovieMaker(self.fh.frame_sequence, 'curvature_yt', movie_format='.mkv')
+
+    def reset(self, save_frame=False, make_movie=False):
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                if make_movie:
+                    self.mm.make_movie()
+                    pygame.time.delay(5)
+                    self.mm.del_img_seq()
+                sys.exit()
+        if save_frame:
+            self.fh.save_frame()
+        self.set_back()
+
+    @staticmethod
+    def refresh():
+        pygame.display.update()
 
 
 class Window:
@@ -42,6 +64,17 @@ class Window:
             return self.center[0] + co_ordinate[0], self.center[1] - co_ordinate[1]
         elif wrt == "origin":
             return self.center[0] + self.origin[0] + co_ordinate[0], self.center[1] - self.origin[1] - co_ordinate[1]
+
+    @staticmethod
+    def true_cord(point, wrt):
+        return point[0] + wrt[0], point[1] + wrt[1]
+
+    @staticmethod
+    def polar_to_cart(polar_cord):
+        return polar_cord[0]*np.cos(polar_cord[1]), polar_cord[0]*np.sin(polar_cord[1])
+
+    def scale_coordinate(self, coordinate):
+        return self.scaling[0]*coordinate[0], self.scaling[1]*coordinate[1]
 
     def draw_axis(self, c=(200, 200, 200), lw=1):
 
@@ -140,7 +173,7 @@ class Window:
         else:
             self.origin = self.origin[0], -self.height / 2
 
-    def draw(self, x_cords=None, y_cords=None, c=(255, 255, 0), lw=2, x_scaled=True, y_scaled=True):
+    def draw(self, x_cords=None, y_cords=None, c=(255, 255, 0), lw=2, x_scaled=False, y_scaled=False):
         if y_scaled:
             self.scaling = self.scaling[0], self.height/(max(y_cords) - min(y_cords))
 
@@ -161,6 +194,27 @@ class Window:
             pygame.draw.line(self.screen, c,
                              start_point, stop_point, lw)
             start_point = stop_point
+
+    def p_draw(self, center, initial_polar_cord, final_polar_cord, c=(200, 190, 10), lw=1):
+        initial_cord = self.true_coordinate(self.scale_coordinate(self.true_cord(self.polar_to_cart(initial_polar_cord), wrt=center)), wrt='origin')
+        final_cord = self.true_coordinate(self.scale_coordinate(self.true_cord(self.polar_to_cart(final_polar_cord), wrt=center)), wrt='origin')
+
+
+        center = self.true_coordinate(center, wrt='center')
+        pygame.draw.line(self.screen, c, initial_cord, final_cord, lw)
+
+    def c_draw(self, initial_point, final_point, c=(255, 255, 0), lw=1):
+        initial_point = self.true_coordinate(self.scale_coordinate(initial_point), wrt='origin')
+        final_point = self.true_coordinate(self.scale_coordinate(final_point), wrt='origin')
+
+        pygame.draw.line(self.screen, c, initial_point, final_point, lw)
+
+    def draw_circle(self, center, radius, c=(255, 255, 255), lw=1, smoothness=100):
+        x = np.linspace(0, 2*np.pi, smoothness)
+        self.draw(radius*np.cos(x) + center[0], radius*np.sin(x) + center[1], c=c, lw=lw, x_scaled=False, y_scaled=False)
+
+
+
 
 
 if __name__ == "__main__":
