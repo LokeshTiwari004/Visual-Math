@@ -1,7 +1,7 @@
 # Visual-Math
 
 This is a dummy of the visualization library (under development).
-It is formed to get an overview of the project and using PyGame
+It is formed to get an overview of the project and formed using PyGame
  but the original library is formed
  on the top of openCV and ffmpeg.
 The main project is under the repo named "drawingofmath".
